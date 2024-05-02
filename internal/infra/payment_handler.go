@@ -3,31 +3,42 @@ package infra
 import (
 	"encoding/json"
 	"net/http"
-	pi "payment-api/internal/entity"
+	"payment-api/internal/entity"
+
+	"github.com/stripe/stripe-go"
 )
 
-func PaymentHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method != "POST" {
-		http.Error(w, "Unsupported method", http.StatusMethodNotAllowed)
-		return
-	}
+func MakePaymentHandler(service entity.PaymentIntentService) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != "POST" {
+			http.Error(w, "Unsupported method", http.StatusMethodNotAllowed)
+			return
+		}
 
-	var req struct {
-		Amount          int64  `json:"amount"`
-		Currency        string `json:"currency"`
-		PaymentMethodID string `json:"paymentMethodId"`
-	}
+		var req struct {
+			Amount          int64  `json:"amount"`
+			Currency        string `json:"currency"`
+			PaymentMethodID string `json:"paymentMethodId"`
+		}
 
-	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		http.Error(w, "Error decoding request body", http.StatusBadRequest)
-		return
-	}
+		if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+			http.Error(w, "Error decoding request body", http.StatusBadRequest)
+			return
+		}
 
-	pi, err := pi.CreatePaymentIntent(req.Amount, req.Currency, req.PaymentMethodID)
-	if err != nil {
-		http.Error(w, "Failed to create payment intent", http.StatusInternalServerError)
-		return
-	}
+		params := &stripe.PaymentIntentParams{
+			Amount:        stripe.Int64(req.Amount),
+			Currency:      stripe.String(req.Currency),
+			PaymentMethod: stripe.String(req.PaymentMethodID),
+			Confirm:       stripe.Bool(true),
+		}
 
-	json.NewEncoder(w).Encode(pi)
+		pi, err := service.New(params)
+		if err != nil {
+			http.Error(w, "Failed to create payment intent", http.StatusInternalServerError)
+			return
+		}
+
+		json.NewEncoder(w).Encode(pi)
+	}
 }

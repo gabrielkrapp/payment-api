@@ -6,6 +6,7 @@ import (
 	"os"
 	"time"
 
+	"payment-api/internal/entity"
 	route "payment-api/internal/infra"
 
 	"github.com/stripe/stripe-go/v72"
@@ -27,7 +28,10 @@ func main() {
 		MaxHeaderBytes: 1 << 20,
 	}
 
-	http.HandleFunc("/payment", route.PaymentHandler)
+	paymentService := &entity.StripePaymentIntentService{}
+
+	http.HandleFunc("/payment", route.MakePaymentHandler(paymentService))
+
 	err := server.ListenAndServe()
 	if err != nil {
 		log.Fatalf("Failed to start server: %v", err)

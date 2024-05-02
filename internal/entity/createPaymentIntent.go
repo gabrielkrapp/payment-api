@@ -7,6 +7,16 @@ import (
 	"github.com/stripe/stripe-go/paymentintent"
 )
 
+type PaymentIntentService interface {
+	New(params *stripe.PaymentIntentParams) (*stripe.PaymentIntent, error)
+}
+
+type StripePaymentIntentService struct{}
+
+func (s StripePaymentIntentService) New(params *stripe.PaymentIntentParams) (*stripe.PaymentIntent, error) {
+	return paymentintent.New(params)
+}
+
 func CreatePaymentIntent(amount int64, currency string, paymentMethodID string) (*stripe.PaymentIntent, error) {
 	params := &stripe.PaymentIntentParams{
 		Amount:        stripe.Int64(amount),
