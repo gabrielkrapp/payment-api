@@ -1,8 +1,6 @@
 package entity
 
 import (
-	"log"
-
 	"github.com/stripe/stripe-go"
 	"github.com/stripe/stripe-go/paymentintent"
 )
@@ -17,7 +15,7 @@ func (s StripePaymentIntentService) New(params *stripe.PaymentIntentParams) (*st
 	return paymentintent.New(params)
 }
 
-func CreatePaymentIntent(amount int64, currency string, paymentMethodID string) (*stripe.PaymentIntent, error) {
+func CreatePaymentIntent(service PaymentIntentService, amount int64, currency string, paymentMethodID string) (*stripe.PaymentIntent, error) {
 	params := &stripe.PaymentIntentParams{
 		Amount:        stripe.Int64(amount),
 		Currency:      stripe.String(currency),
@@ -25,11 +23,5 @@ func CreatePaymentIntent(amount int64, currency string, paymentMethodID string) 
 		Confirm:       stripe.Bool(true),
 	}
 
-	pi, err := paymentintent.New(params)
-	if err != nil {
-		log.Printf("Failed to create payment intent: %v", err)
-		return nil, err
-	}
-
-	return pi, nil
+	return service.New(params)
 }
