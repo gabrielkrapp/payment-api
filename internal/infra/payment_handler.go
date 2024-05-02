@@ -6,7 +6,7 @@ import (
 	pi "payment-api/internal/entity"
 )
 
-func paymentHandler(w http.ResponseWriter, r *http.Request) {
+func PaymentHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "POST" {
 		http.Error(w, "Unsupported method", http.StatusMethodNotAllowed)
 		return
@@ -17,6 +17,7 @@ func paymentHandler(w http.ResponseWriter, r *http.Request) {
 		Currency        string `json:"currency"`
 		PaymentMethodID string `json:"paymentMethodId"`
 	}
+
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		http.Error(w, "Error decoding request body", http.StatusBadRequest)
 		return
