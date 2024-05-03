@@ -10,7 +10,13 @@
     <div class="container">
         <h2>Pagamento com Stripe</h2>
         <form id="payment-form">
+            <label for="amount">Valor:</label>
+            <input type="number" id="amount" name="amount" placeholder="Valor em centavos" required>
+            <label for="currency">Moeda:</label>
+            <input type="text" id="currency" name="currency" placeholder="USD, EUR, etc." required>
+
             <div id="card-element" class="card-element">
+                <!-- Stripe Elements will put the card form here -->
             </div>
             <button type="submit" class="btn-pay">Pagar</button>
             <p id="card-errors" class="card-errors"></p>

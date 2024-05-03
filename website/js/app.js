@@ -23,6 +23,9 @@ document.addEventListener('DOMContentLoaded', function() {
     form.addEventListener('submit', function(event) {
         event.preventDefault();
 
+        var amount = document.getElementById('amount').value;
+        var currency = document.getElementById('currency').value;
+
         stripe.createPaymentMethod({
             type: 'card',
             card: card
@@ -36,7 +39,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ paymentMethodId: result.paymentMethod.id })
+                    body: JSON.stringify({
+                        paymentMethodId: result.paymentMethod.id,
+                        amount: parseInt(amount),
+                        currency: currency.toUpperCase()
+                    })
                 }).then(function(response) {
                     response.json().then(function(json) {
                         console.log(json);
