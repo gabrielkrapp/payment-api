@@ -2,6 +2,7 @@ package infra
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 	"payment-api/internal/entity"
 
@@ -39,6 +40,11 @@ func MakePaymentHandler(service entity.PaymentIntentService) http.HandlerFunc {
 			return
 		}
 
-		json.NewEncoder(w).Encode(pi)
+		err = json.NewEncoder(w).Encode(pi)
+		if err != nil {
+			log.Printf("Failed to encode data: %v", err)
+			http.Error(w, "Failed to encode response", http.StatusInternalServerError)
+			return
+		}
 	}
 }
