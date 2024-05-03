@@ -45,3 +45,30 @@ h2 {
     color: red;
     margin-top: 12px;
 }
+
+.field {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    color: #333;
+    font-size: 14px;
+}
+
+input[type="number"],
+input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+input[type="number"]:focus,
+input[type="text"]:focus {
+    border-color: #4CAF50;
+    outline: none;
+}
