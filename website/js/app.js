@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 var errorElement = document.getElementById('card-errors');
                 errorElement.textContent = result.error.message;
             } else {
-                fetch('/payment', {
+                fetch('/v1/payment', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
