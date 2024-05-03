@@ -30,7 +30,7 @@ func main() {
 
 	paymentService := &entity.StripePaymentIntentService{}
 
-	http.HandleFunc("/payment", route.MakePaymentHandler(paymentService))
+	http.HandleFunc("/v1/payment", route.MakePaymentHandler(paymentService))
 
 	err := server.ListenAndServe()
 	if err != nil {
