@@ -6,10 +6,13 @@ import (
 	"net/http"
 	"payment-api/internal/entity"
 
+	"github.com/IBM/sarama"
 	"github.com/stripe/stripe-go"
+
+	"payment-api/pkg/kafka"
 )
 
-func MakePaymentHandler(service entity.PaymentIntentService) http.HandlerFunc {
+func MakePaymentHandler(service entity.PaymentIntentService, producer sarama.SyncProducer, topic string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != "POST" {
 			http.Error(w, "Unsupported method", http.StatusMethodNotAllowed)
@@ -38,6 +41,13 @@ func MakePaymentHandler(service entity.PaymentIntentService) http.HandlerFunc {
 		if err != nil {
 			http.Error(w, "Failed to create payment intent", http.StatusInternalServerError)
 			return
+		}
+
+		message, err := json.Marshal(pi)
+		if err != nil {
+			log.Printf("Failed to marshal payment intent: %v", err)
+		} else {
+			kafka.KafkaProducer(producer, topic, message)
 		}
 
 		err = json.NewEncoder(w).Encode(pi)
