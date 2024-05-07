@@ -4,8 +4,8 @@ import (
 	"log"
 	"net/http"
 	"payment-api/config"
-	"payment-api/internal/entity"
-	"payment-api/internal/infra"
+	"payment-api/internal/api/entity"
+	"payment-api/internal/api/infra"
 )
 
 func main() {
