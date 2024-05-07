@@ -27,7 +27,6 @@ jobs:
       - name: Increment version and create tag
         id: tag_version
         run: |
-          # Determine a nova versão a partir do último tag
           last_tag=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
           IFS='.' read -r -a ver <<< "${last_tag/v/}"
           major="${ver[0]}"
@@ -35,7 +34,12 @@ jobs:
           patch=$((ver[2] + 1))
           new_version="v${major}.${minor}.${patch}"
 
-          # Criar um novo tag
+          if git rev-parse "refs/tags/${new_version}" >/dev/null 2>&1; then
+            echo "Tag ${new_version} already exists. Incrementing patch number."
+            patch=$((patch + 1))
+            new_version="v${major}.${minor}.${patch}"
+          fi
+
           git tag "${new_version}"
           echo "::set-output name=tag::${new_version}"
 
