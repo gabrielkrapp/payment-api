@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
-	"payment-api/internal/entity"
+	"payment-api/internal/api/entity"
 
 	"github.com/IBM/sarama"
 	"github.com/stripe/stripe-go"
