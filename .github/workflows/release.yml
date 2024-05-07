@@ -1,0 +1,51 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  release:
+    name: Create New Release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v3
+
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: '1.22.2'
+
+      - name: Configure Git user
+        run: |
+          git config user.name "GitHub Actions Bot"
+          git config user.email "<>"
+
+      - name: Increment version and create tag
+        id: tag_version
+        run: |
+          # Determine a nova versão a partir do último tag
+          last_tag=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
+          IFS='.' read -r -a ver <<< "${last_tag/v/}"
+          major="${ver[0]}"
+          minor="${ver[1]}"
+          patch=$((ver[2] + 1))
+          new_version="v${major}.${minor}.${patch}"
+
+          # Criar um novo tag
+          git tag "${new_version}"
+          echo "::set-output name=tag::${new_version}"
+
+      - name: Push new tag to repository
+        run: |
+          git push origin --tags
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ steps.tag_version.outputs.tag }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
