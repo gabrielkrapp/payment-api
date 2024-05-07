@@ -19,7 +19,7 @@ func main() {
 
 	paymentService := &entity.StripePaymentIntentService{}
 
-	http.HandleFunc("/payment", infra.MakePaymentHandler(paymentService, producer, "payment-intents"))
+	http.HandleFunc("/v1/payment", infra.MakePaymentHandler(paymentService, producer, "payment-intents"))
 
 	if err := server.ListenAndServe(); err != nil {
 		log.Fatalf("Failed to start server: %v", err)
