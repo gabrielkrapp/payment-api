@@ -32,7 +32,8 @@ jobs:
           major="${ver[0]}"
           minor="${ver[1]}"
           patch=$((ver[2] + 1))
-          new_version="v${major}.${minor}.${patch}-$(date +'%Y%m%d%H%M%S')"
+
+          new_version="v${major}.${minor}.${patch}"
 
           git tag "${new_version}"
           echo "::set-output name=tag::${new_version}"
