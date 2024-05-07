@@ -32,13 +32,7 @@ jobs:
           major="${ver[0]}"
           minor="${ver[1]}"
           patch=$((ver[2] + 1))
-          new_version="v${major}.${minor}.${patch}"
-
-          if git rev-parse "refs/tags/${new_version}" >/dev/null 2>&1; then
-            echo "Tag ${new_version} already exists. Incrementing patch number."
-            patch=$((patch + 1))
-            new_version="v${major}.${minor}.${patch}"
-          fi
+          new_version="v${major}.${minor}.${patch}-$(date +'%Y%m%d%H%M%S')"
 
           git tag "${new_version}"
           echo "::set-output name=tag::${new_version}"
