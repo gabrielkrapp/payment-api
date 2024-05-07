@@ -1,0 +1,17 @@
+name: Security Scan
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v3
+
+      - name: Run Trivy Vulnerability Scanner
+        uses: aquasecurity/trivy-action@v0.3.0
