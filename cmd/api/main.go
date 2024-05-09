@@ -13,8 +13,7 @@ func main() {
 
 	server := config.NewHTTPServer(":8080")
 
-	brokers := []string{"localhost:9092"}
-	producer := config.NewKafkaProducer(brokers)
+	producer := config.NewKafkaProducer()
 	defer producer.Close()
 
 	paymentService := &entity.StripePaymentIntentService{}
