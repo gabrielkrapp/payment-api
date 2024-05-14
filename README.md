@@ -36,7 +36,7 @@ This project is a payment processing system that integrates Apache Kafka for mes
 1. **Clone the Repository**
 
 ```bash
-git clone https://github.com/your-username/payment-api.git
+git clone https://github.com/gabrielkrapp/payment-api.git
 cd payment-api
 ```
 
