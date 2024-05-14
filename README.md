@@ -46,10 +46,6 @@ Create an `.env` file at the root of the project and adjust the variables accord
 
 ```plaintext
 STRIPE_KEY=your_stripe_api_key
-KAFKA_BROKERS=localhost:9092
-AWS_REGION=your_aws_region
-AWS_ACCESS_KEY_ID=your_aws_access_key
-AWS_SECRET_ACCESS_KEY=your_aws_secret_key
 ```
 
 3. **Start Kafka**
